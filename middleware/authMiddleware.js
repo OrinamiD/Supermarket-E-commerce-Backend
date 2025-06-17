@@ -1,5 +1,11 @@
 
+
+const jwt = require("jsonwebtoken")
 const joi = require("joi")
+const User = require("../models/userModel")
+
+
+
 
 const AuthSignup = async (req, res, next)=>{
 
@@ -70,7 +76,66 @@ const AuthSignup = async (req, res, next)=>{
     
 }
 
+const loginValidation = async (req, res, next)=>{
+    
+     const { email, password } = req.body
+
+     const errors = []
+
+      if(!email){
+        errors.push("Provide your email")
+    }
+
+      if(!password){
+        errors.push("Provide your password")
+    }
+
+    if(errors.length > 0 ){
+        return res.status(200).json({message: errors})
+    }
+
+ next()
+
+     
+}
+
+const auth = async (req, res, next)=>{
+
+    const token = req.header('Authorization')
+
+    if(!token){
+        return res.status(401).json({ message: "Incorrect details"})
+    }
+
+    const splitToken = token.split(" ")
+
+    const realToken = splitToken[1]
+
+    const verifiedToken = jwt.verify(realToken, `${process.env.ACCESS_TOKEN}`)
+
+    if(!verifiedToken){
+        return res.status(401).json({message: "Access denied"})
+    }
+
+    const user = await User.findOne({email: verifiedToken?.email })
+
+    if(!user){
+        return res.status(401).json({message: "Authorized access"})
+    }
+
+    req.user = user
+
+
+   next()
+
+
+
+}
+
 
 module.exports = {
-  AuthSignup
+  AuthSignup,
+  loginValidation,
+  auth
+
 };
