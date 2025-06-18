@@ -12,7 +12,7 @@ const dotenv = require("dotenv").config()
 
 const cors = require("cors")
 const routes = require("./routes")
-const { auth } = require("./middleware/authMiddleware")
+
 
 
 

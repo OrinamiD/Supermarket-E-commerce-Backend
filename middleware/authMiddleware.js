@@ -1,141 +1,166 @@
+const jwt = require("jsonwebtoken");
+const joi = require("joi");
+const User = require("../models/userModel");
 
+const AuthSignup = async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-const jwt = require("jsonwebtoken")
-const joi = require("joi")
-const User = require("../models/userModel")
+  const errors = [];
 
+  if (!name) {
+    errors.push("Provide your name");
+  }
 
+  if (!email) {
+    errors.push("Provide your email");
+  }
 
+  if (!password) {
+    errors.push("Provide your password");
+  }
 
-const AuthSignup = async (req, res, next)=>{
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-    const { name, email, password } = req.body
+  const signupSchema = joi.object({
+    name: joi
+      .string()
+      .required()
+      .pattern(new RegExp("^[A-Za-zs'-]{2,}$"))
+      .messages({
+        "string.pattern.base":
+          "Name must contain only alphabetic characters, spaces, apostrophes, or hyphens. Numbers and special symbols are not allowed.",
+      }),
 
-    const errors = []
+    email: joi
+      .string()
+      .required()
+      .min(4)
+      .max(60)
+      .pattern(new RegExp("^[^@]+@[^@]+.[^@]+$"))
+      .messages({
+        "string.pattern.base":
+          "Please enter a valid email address (e.g., name@example.com).",
+        "string.email": "Please enter a valid email address.",
+      }),
 
-    if(!name){
-        errors.push("Provide your name")
-    }
+    password: joi
+      .string()
 
-    if(!email){
-        errors.push("Provide your email")
-    }
+      .required()
+      .pattern(
+        new RegExp(
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+        )
+      )
+      .messages({
+        "string.pattern.base":
+          "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+      }),
+  });
 
-      if(!password){
-        errors.push("Provide your password")
-    }
+  const { error } = signupSchema.validate({ name, email, password });
 
-    if(errors.length > 0 ){
-        return res.status(200).json({message: errors})
-    }
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
 
-    const signupSchema = joi.object({
-       
-        name: joi.string()
-        .required()
-        .pattern(new RegExp("^[A-Za-z\s'-]{2,}$"))
-        .messages({
-            'string.pattern.base': "Name must contain only alphabetic characters, spaces, apostrophes, or hyphens. Numbers and special symbols are not allowed.",
-           
+  next();
+};
 
-        }),            
+const loginValidation = async (req, res, next) => {
+  const { email, password } = req.body;
 
+  const errors = [];
 
-        email: joi.string()
-        .required()
-        .min(4)
-        .max(60)
-        .pattern(new RegExp("^[^@]+@[^@]+\.[^@]+$"))
-        .messages({
-        'string.pattern.base': "Please enter a valid email address (e.g., name@example.com).",
-        'string.email': "Please enter a valid email address.",
-      
-    }),
+  if (!email) {
+    errors.push("Provide your email");
+  }
 
+  if (!password) {
+    errors.push("Provide your password");
+  }
 
-        password: joi.string()
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-        .required()
-        .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
-        .messages({
-            'string.pattern.base': "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-          
+  next();
+};
 
-        })
+const auth = async (req, res, next) => {
+  const token = req.header("Authorization");
 
-        
-    })
+  if (!token) {
+    return res.status(401).json({ message: "Incorrect details" });
+  }
 
-    const { error } = signupSchema.validate({ name, email, password})
+  const splitToken = token.split(" ");
 
-    if(error){
-        return res.status(400).json({ message: error.message})
-    }
+  const realToken = splitToken[1];
 
-    next()
-    
-}
+  const decoded = jwt.verify(realToken, `${process.env.ACCESS_TOKEN}`);
 
-const loginValidation = async (req, res, next)=>{
-    
-     const { email, password } = req.body
+  if (!decoded) {
+    return res.status(401).json({ message: "Access denied" });
+  }
 
-     const errors = []
+  const user = await User.findOne({ email: decoded?.email });
 
-      if(!email){
-        errors.push("Provide your email")
-    }
+  if (!user) {
+    return res.status(401).json({ message: "Authorized access" });
+  }
 
-      if(!password){
-        errors.push("Provide your password")
-    }
+  req.user = user;
 
-    if(errors.length > 0 ){
-        return res.status(200).json({message: errors})
-    }
+  next();
+};
 
- next()
+const isAdmin = async (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    return res.status(403).json({ message: "Forbidden. Admin only" });
+  }
+};
 
-     
-}
+const forgotPasswordValidate = async (req, res, next) => {
+  const { email } = req.body;
 
-const auth = async (req, res, next)=>{
+  const errors = [];
 
-    const token = req.header('Authorization')
+  if (!email) {
+    errors.push("Email is required");
+  }
 
-    if(!token){
-        return res.status(401).json({ message: "Incorrect details"})
-    }
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-    const splitToken = token.split(" ")
+  next();
+};
+const resetPasswordValidate = async (req, res, next) => {
+  const { password } = req.body;
 
-    const realToken = splitToken[1]
+  const errors = [];
 
-    const verifiedToken = jwt.verify(realToken, `${process.env.ACCESS_TOKEN}`)
+  if (!password) {
+    errors.push("Password is required");
+  }
 
-    if(!verifiedToken){
-        return res.status(401).json({message: "Access denied"})
-    }
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-    const user = await User.findOne({email: verifiedToken?.email })
-
-    if(!user){
-        return res.status(401).json({message: "Authorized access"})
-    }
-
-    req.user = user
-
-
-   next()
-
-
-
-}
-
+  next();
+};
 
 module.exports = {
   AuthSignup,
   loginValidation,
-  auth
-
+  auth,
+  isAdmin,
+  forgotPasswordValidate,
+  resetPasswordValidate,
 };

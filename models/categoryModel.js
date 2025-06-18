@@ -3,15 +3,10 @@
 const mongoose = require("mongoose")
 
 const categorySchema = new mongoose.Schema({
-    id: {
-        
-        type: String,
-        require: true,
-
-    },
 
     name: {
         type: String,
+        trim: true,
         require: [true, 'category name is required'],
 
     },

@@ -1,38 +1,40 @@
 
 
 const mongoose = require("mongoose")
+const Category = require("./categoryModel")
+const { required } = require("joi")
 
 const productSchema = new mongoose.Schema({
 
     name: {
 
-        type: string,
-        require: [true, 'product name is required'],
+        type: String,
+        required: [true, 'product name is required'],
         trim: true
-    
+   
     },
 
     price: {
 
         type: Number,
         default: 0,
-        require: [true, 'price is required'],
+        required: [true, 'price is required'],
 
     
     },
 
     stock: {
 
-        type: Boolean,
-        enum: ['false', 'true'],
-        default: false,
+        type: Number,
+        required: [true,' stock is required'],
+        default: 0,
     
     },
 
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Category,
-        require: true
+        ref: "Category",
+        required: true
 
     }
 
