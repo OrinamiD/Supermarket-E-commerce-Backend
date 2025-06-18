@@ -1,12 +1,13 @@
 
 
 const mongoose = require("mongoose")
+const Product = require("./productModel")
 
 const orderSchema = new mongoose.Schema({
     items: [
         {
             product: {
-                type: mongoose.Schema.Types.ObjectId, ref: 'product'},
+                type: mongoose.Schema.Types.ObjectId, ref: "Product"},
                 quantity: {
                     type: Number,
                     require: true}

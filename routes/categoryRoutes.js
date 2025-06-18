@@ -9,4 +9,3 @@ router.post("/add-category", auth, isAdmin, categoryValidation, handleCategory)
 
 
 module.exports = router;
-

@@ -1,3 +1,6 @@
+
+
+
 const validateProduct = async (req, res, next) => {
   const { name, price, stock, category } = req.body;
 

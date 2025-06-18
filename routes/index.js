@@ -4,12 +4,15 @@ const categoryRoutes = require("./categoryRoutes");
 
 const productRoutes = require("./productRoutes")
 
+const orderRoutes = require("./orderRoutes")
+
 
 
 const routes = [
   authRoutes,
   categoryRoutes,
-  productRoutes
+  productRoutes,
+  orderRoutes
   
 ];
 
