@@ -1,16 +1,18 @@
 
 
+
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
+
+    userId: {type: String},
+
     name: {
 
         type: String,
         trim: true,
         require: [true, "name is required"],
-        // match: "/^[A-Za-z]+(?:[\s-][A-Za-z]+)*$/"
 
-    
     },
 
     email: {
@@ -20,7 +22,6 @@ const userSchema = new mongoose.Schema({
         unique: [true, 'email must be unique'],
         minLength: 3,
         maxLength: 60,
-        // match: "/^[^\s@]+@[^\s@]+\.[^\s@]+$/"
     
     
     },
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         require: [true, 'password is required'],
-        // match: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
+      
     },
 
 

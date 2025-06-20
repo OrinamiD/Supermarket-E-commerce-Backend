@@ -65,9 +65,39 @@ const handleGetOneProduct = async (req, res)=>{
   }
 }
 
+const handleUpdateProductPrice = async (req, res)=>{
+
+  const { _id } = req.body
+
+  const { price } = req.body
+
+ try {
+  
+   const productDetails = await Product.findOne({productId: _id})
+
+  if(!productDetails){
+    return res.status(404).json({message: "Product infomation not found"})
+  }
+
+  const newPrice = await Product.findByIdAndUpdate(_id,
+    {price},
+    {new: true}
+  )
+await newPrice.save()
+
+return res.status(200).json({message: "Product Price updated successfullly", newPrice})
+
+ } catch (error) {
+  return res.status(200).json({message: error,message})
+
+ }
+
+}
+
 module.exports = {
   handleProduct,
   handleGetAllProducts,
-  handleGetOneProduct
+  handleGetOneProduct,
+  handleUpdateProductPrice
 };
 

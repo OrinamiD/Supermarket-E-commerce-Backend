@@ -23,7 +23,7 @@ const handleSignup = async (req, res) => {
       email,
       password: hashPassword,
     });
-    const result = await newUser.save();
+     const result = await newUser.save();
 
     result.password = undefined;
 
@@ -66,6 +66,7 @@ const handleSignin = async (req, res) => {
         message: "logged in successfully",
         email: user?.email,
         name: user?.name,
+        userId: user?._id,
         accessToken,
       },
 

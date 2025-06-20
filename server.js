@@ -16,7 +16,6 @@ const routes = require("./routes")
 
 
 
-
 const app = express()
 
 app.use(express.json())
@@ -41,7 +40,7 @@ const port = process.env.PORT || 5000;
 // mongoose
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
-    console.log("MONGOD connect successfully")
+    console.log("MONGODB connected successfully")
 
     app.listen(port, ()=>{
         console.log(`Server running on port ${port}`)

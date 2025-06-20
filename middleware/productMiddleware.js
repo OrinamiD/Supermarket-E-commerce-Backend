@@ -26,7 +26,25 @@ const validateProduct = async (req, res, next) => {
   next();
 };
 
+const validateUpdateProductPrice = async (req, res, next)=>{
+
+  const { _id } = req.body
+
+  const errors = []
+
+  if(!_id){
+    errors.push("Product id is required")
+  }
+
+  if(errors.length > 0 ){
+    return res.status(200).json({message: errors})
+  }
+
+  next()
+}
+
 
 module.exports = {
-    validateProduct
+    validateProduct,
+    validateUpdateProductPrice
 }
