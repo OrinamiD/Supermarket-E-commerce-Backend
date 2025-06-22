@@ -25,11 +25,11 @@ const handleSignup = async (req, res) => {
       email,
       password: hashPassword,
     });
-     const result = await newUser.save();
+    const result = await newUser.save();
 
     result.password = undefined;
 
-  await sendRegistrationEmail(name, email, password)
+    await sendRegistrationEmail(name, email, password);
 
     return res.status(200).json({ message: "Registration successful", result });
   } catch (error) {
@@ -94,15 +94,15 @@ const handleFogotPassword = async (req, res) => {
 
     // send mail with token
 
-   const otp = Math.floor(1000000 + Math.random() * 9000000).toString(); // Always 7-digit
-  const hashOTP = await bcrypt.hash(otp, 12);
+    const otp = Math.floor(1000000 + Math.random() * 9000000).toString(); // Always 7-digit
+    const hashOTP = await bcrypt.hash(otp, 12);
 
     user.OtpCode = {
       OTP: hashOTP,
       verified: false,
-      expiresIn: new (Date.now() + 10 * 60 * 1000) // 10 mins
-    }
-      await user.save()
+      expiresIn: new (Date.now() + 10 * 60 * 1000)(), // 10 mins
+    };
+    await user.save();
 
     const accessToken = jwt.sign(
       { email: req.user?.email, role: req.user?.role, name: req.user?.name },
@@ -110,10 +110,9 @@ const handleFogotPassword = async (req, res) => {
       { expiresIn: "3m" }
     );
 
-    await sendForgotPasswordEmail(email, accessToken, otp)
+    await sendForgotPasswordEmail(email, accessToken, otp);
 
-    return res.status(200).json({ messsage: "check your email", accessToken});
-
+    return res.status(200).json({ messsage: "check your email", accessToken });
   } catch (error) {
     return res.status(200).json({ messsage: error.message });
   }
@@ -176,42 +175,40 @@ const handleResetPassword = async (req, res) => {
   }
 };
 
-const handleVerifyOtp = async (req, res)=>{
-
-  const { email, otp} = req.body
+const handleVerifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
   try {
-    
-    const user = await User.findOne({ email})
+    const user = await User.findOne({ email });
 
-    if(!user || !user.otp){
-      return res.status(404).json({message: "Invalid OTP"})
+    if (!user || !user.otp) {
+      return res.status(404).json({ message: "Invalid OTP" });
     }
 
-  const isValid = await bcrypt.compare(otp, user.otp)
+    const isValid = await bcrypt.compare(otp, user.otp);
 
-  if(!isValid){
-    return res.status(400).json({message: "unauthorized prompt"})
-  }
+    if (!isValid) {
+      return res.status(400).json({ message: "unauthorized prompt" });
+    }
 
-   const isExpired = user.OtpCode.expiresAt < new Date();
+    const isExpired = user.OtpCode.expiresAt < new Date();
 
-     if (isExpired) {
+    if (isExpired) {
       return res.status(400).json({ message: "Expired OTP" });
     }
 
-    user.OtpCode.verified = true
-    await user.save()
+    user.OtpCode.verified = true;
+    await user.save();
 
-  return res.status(200).json({message: "OTP verified successfully"})
+    return res.status(200).json({ message: "OTP verified successfully" });
   } catch (error) {
-    return res.status(500).json({message: error.message})
+    return res.status(500).json({ message: error.message });
   }
-}
+};
 
 module.exports = {
   handleSignup,
   handleSignin,
   handleFogotPassword,
   handleResetPassword,
-  handleVerifyOtp
+  handleVerifyOtp,
 };

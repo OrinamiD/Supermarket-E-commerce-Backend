@@ -1,46 +1,36 @@
+const nodemailer = require("nodemailer");
 
+const sendRegistrationEmail = async (email) => {
+  try {
+    const mailTransport = nodemailer.createTransport({
+      service: "gamil",
+      auth: {
+        user: `${process.env.EMAIL}`,
+        pass: `${process.env.EMAIL_PASSWORD}`,
+      },
+    });
 
-const nodemailer = require("nodemailer")
-
-const sendRegistrationEmail = async (email)=>{
-
-    try {
-        
-        const mailTransport = nodemailer.createTransport({
-            service: "gamil",
-            auth: {
-                user: `${process.env.EMAIL}`,
-                pass: `${process.env.EMAIL_PASSWORD}`
-            },
-        })
-
-        const emailDetails = {
-            from: `${process.env.EMAIL}`,
-            to: `${email}`,
-            subject: `Registration Notification`,
-            html: `
+    const emailDetails = {
+      from: `${process.env.EMAIL}`,
+      to: `${email}`,
+      subject: `Registration Notification`,
+      html: `
     <h2>Welcome to E-Commerce Superstore!</h2>
     <p>We're excited to have you join us. 
 
             <hr>
 
     <p>Thank you,<br/>The E-Commerce Superstore Team</p>
-`
+`,
+    };
 
-        }
+    mailTransport.sendMail(emailDetails);
+  } catch (error) {
+    return json({ message: error.message });
+  }
+};
 
-        mailTransport.sendMail(emailDetails)
-    } catch (error) {
-        return json({message: error.message})
-    }
-}
-
-
-module.exports = sendRegistrationEmail
-
-
-
-
+module.exports = sendRegistrationEmail;
 
 //  html: `
 //     <h2>Welcome to E-Commerce Superstore!</h2>

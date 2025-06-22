@@ -19,7 +19,7 @@ const handleCategory = async (req, res) => {
       .status(200)
       .json({ message: " Category added Successfully", categoryName });
   } catch (error) {
-    return res.status(500).json({message: error.message})
+    return res.status(500).json({ message: error.message });
   }
 };
 

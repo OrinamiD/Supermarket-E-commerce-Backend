@@ -1,18 +1,27 @@
+const express = require("express");
+const { auth, isAdmin } = require("../middleware/authMiddleware");
+const {
+  handlePlaceAnOrder,
+  handleUpdateOrderStutus,
+  handleGetAllOrders,
+} = require("../controllers/orderController");
+const {
+  validateOrder,
+  validateUpdateStatus,
+} = require("../middleware/orderMiddleware");
 
+const router = express.Router();
 
-const express = require("express")
-const { auth, isAdmin } = require("../middleware/authMiddleware")
-const {handlePlaceAnOrder, handleUpdateOrderStutus, handleGetAllOrders } = require("../controllers/orderController")
-const { validateOrder, validateUpdateStatus } = require("../middleware/orderMiddleware")
+router.post("/place-an-order", validateOrder, auth, handlePlaceAnOrder);
 
-const router = express.Router()
+router.patch(
+  "/update-order-status",
+  validateUpdateStatus,
+  auth,
+  isAdmin,
+  handleUpdateOrderStutus
+);
 
-router.post("/place-an-order",validateOrder,  auth, handlePlaceAnOrder)
+router.get("/get-all-order", auth, handleGetAllOrders);
 
-router.patch("/update-order-status", validateUpdateStatus, auth, isAdmin,  handleUpdateOrderStutus)
-
-router.get("/get-all-order", auth, handleGetAllOrders)
-
-
-
-module.exports = router
+module.exports = router;

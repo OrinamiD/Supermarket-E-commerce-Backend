@@ -1,19 +1,36 @@
+const express = require("express");
+const { auth, isAdmin } = require("../middleware/authMiddleware");
+const {
+  validateProduct,
+  validateUpdateProductPrice,
+} = require("../middleware/productMiddleware");
+const {
+  handleAddNewProduct,
+  handleGetAllProducts,
+  handleGetOneProduct,
+  handleUpdateProductPrice,
+} = require("../controllers/productController");
 
+const router = express.Router();
 
-const express = require("express")
-const { auth, isAdmin } = require("../middleware/authMiddleware")
-const { validateProduct, validateUpdateProductPrice } = require("../middleware/productMiddleware")
-const { handleAddNewProduct, handleGetAllProducts, handleGetOneProduct, handleUpdateProductPrice } = require("../controllers/productController")
+router.post(
+  "/add-product",
+  validateProduct,
+  auth,
+  isAdmin,
+  handleAddNewProduct
+);
 
-const router = express.Router()
+router.get("/all-products", auth, handleGetAllProducts);
 
-router.post("/add-product", validateProduct, auth, isAdmin,  handleAddNewProduct)
+router.get("/one-product", auth, handleGetOneProduct);
 
-router.get("/all-products", auth, handleGetAllProducts)
+router.patch(
+  "/update-prduct-price",
+  validateUpdateProductPrice,
+  auth,
+  isAdmin,
+  handleUpdateProductPrice
+);
 
-router.get("/one-product", auth, handleGetOneProduct)
-
-router.patch("/update-prduct-price", validateUpdateProductPrice,  auth, isAdmin, handleUpdateProductPrice  )
-
-
-module.exports = router
+module.exports = router;

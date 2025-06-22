@@ -1,55 +1,52 @@
+const validateOrder = async (req, res, next) => {
+  const { email, items, quantity, total, stock } = req.body;
 
+  const errors = [];
 
-const validateOrder = async (req, res, next)=>{
+  if (!email) {
+    errors.push("your email is required");
+  }
 
-    const { email, items, quantity, total, stock} = req.body
+  // if(items[!product]){
+  //      errors.push("product is required")
+  // }
 
-    const errors = []
+  if (!quantity) {
+    errors.push("quantity is required");
+  }
 
-    if(!email){
-        errors.push("your email is required")
-    }
+  if (quantity > stock) {
+    errors.push("Insufficent stock");
+  }
 
-    // if(items[!product]){
-    //      errors.push("product is required")
-    // }
+  if (stock == 0) {
+    errors.push("Product is not available");
+  }
 
-    if(!quantity){
-         errors.push("quantity is required")
-    }
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-    if(quantity > stock){
-        errors.push("Insufficent stock")
-    }
+  next();
+};
 
-    if(stock == 0 ){
-        errors.push("Product is not available")
-    }
+const validateUpdateStatus = async (req, res, next) => {
+  const { _id } = req.body;
 
-    if(errors.length > 0 ){
-        return res.status(200).json({message: errors})
-    }
+  const errors = [];
 
-    next()
-}
+  if (!_id) {
+    errors.push("id is required");
+  }
 
-const validateUpdateStatus = async(req, res, next)=>{
-    const { _id } = req.body
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
+  }
 
-    const errors = []
-
-    if(!_id){
-        errors.push("id is required")
-    }
-
-    if(errors.length > 0 ){
-        return res.status(200).json({message: errors})
-    }
-
-    next()
-}
+  next();
+};
 
 module.exports = {
-    validateOrder,
-    validateUpdateStatus
-}
+  validateOrder,
+  validateUpdateStatus,
+};

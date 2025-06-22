@@ -21,11 +21,10 @@ router.post("/signup", AuthSignup, handleSignup);
 
 router.post("/signin", loginValidation, handleSignin);
 
-router.post("/signin", forgotPasswordValidate, auth,handleFogotPassword);
+router.post("/signin", forgotPasswordValidate, auth, handleFogotPassword);
 
-router.post("/signin", resetPasswordValidate, auth,handleResetPassword);
+router.post("/signin", resetPasswordValidate, auth, handleResetPassword);
 
-router.post("/verify-otp", validateOTP, auth, handleVerifyOtp)
-
+router.post("/verify-otp", validateOTP, auth, handleVerifyOtp);
 
 module.exports = router;

@@ -156,26 +156,25 @@ const resetPasswordValidate = async (req, res, next) => {
   next();
 };
 
-const validateOTP = async (req, res, next)=>{
+const validateOTP = async (req, res, next) => {
+  const { email, otp } = req.body;
 
-  const { email, otp} = req.body
+  const errors = [];
 
-  const errors = []
-
-  if(!email){
-    errors.push("provide your email")
+  if (!email) {
+    errors.push("provide your email");
   }
 
-  if(!otp){
-     errors.push("provide your OTP")
+  if (!otp) {
+    errors.push("provide your OTP");
   }
 
-  if(errors.length > 0 ){
-    return res.status(200).json({message: errors})
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
   }
 
-  next()
-}
+  next();
+};
 
 module.exports = {
   AuthSignup,
@@ -184,5 +183,5 @@ module.exports = {
   isAdmin,
   forgotPasswordValidate,
   resetPasswordValidate,
-  validateOTP
+  validateOTP,
 };

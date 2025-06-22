@@ -1,6 +1,3 @@
-
-
-
 const validateProduct = async (req, res, next) => {
   const { name, price, stock, category } = req.body;
 
@@ -26,25 +23,23 @@ const validateProduct = async (req, res, next) => {
   next();
 };
 
-const validateUpdateProductPrice = async (req, res, next)=>{
+const validateUpdateProductPrice = async (req, res, next) => {
+  const { _id } = req.body;
 
-  const { _id } = req.body
+  const errors = [];
 
-  const errors = []
-
-  if(!_id){
-    errors.push("Product id is required")
+  if (!_id) {
+    errors.push("Product id is required");
   }
 
-  if(errors.length > 0 ){
-    return res.status(200).json({message: errors})
+  if (errors.length > 0) {
+    return res.status(200).json({ message: errors });
   }
 
-  next()
-}
-
+  next();
+};
 
 module.exports = {
-    validateProduct,
-    validateUpdateProductPrice
-}
+  validateProduct,
+  validateUpdateProductPrice,
+};
