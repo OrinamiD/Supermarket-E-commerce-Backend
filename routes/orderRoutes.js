@@ -7,9 +7,9 @@ const { validateOrder, validateUpdateStatus } = require("../middleware/orderMidd
 
 const router = express.Router()
 
-router.post("/place-an-order", auth, validateOrder, handlePlaceAnOrder)
+router.post("/place-an-order",validateOrder,  auth, handlePlaceAnOrder)
 
-router.patch("/update-order-status", auth, isAdmin, validateUpdateStatus, handleUpdateOrderStutus)
+router.patch("/update-order-status", validateUpdateStatus, auth, isAdmin,  handleUpdateOrderStutus)
 
 router.get("/get-all-order", auth, handleGetAllOrders)
 

@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 
-const handleProduct = async (req, res) => {
+const handleAddNewProduct = async (req, res) => {
   const { name, price, stock, category } = req.body;
 
   try {
@@ -95,7 +95,7 @@ return res.status(200).json({message: "Product Price updated successfullly", new
 }
 
 module.exports = {
-  handleProduct,
+  handleAddNewProduct,
   handleGetAllProducts,
   handleGetOneProduct,
   handleUpdateProductPrice

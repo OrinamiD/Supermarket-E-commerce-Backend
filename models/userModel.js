@@ -1,6 +1,7 @@
 
 
 
+const { boolean } = require("joi")
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
@@ -33,6 +34,14 @@ const userSchema = new mongoose.Schema({
         require: [true, 'password is required'],
       
     },
+
+    OtpCode: {
+      OTP : {type: String},
+      verified: {type: Boolean},
+      expiresAt: {type: Date}
+    },
+
+   
 
 
     role: {
