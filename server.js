@@ -10,6 +10,7 @@ const dotenv = require("dotenv").config();
 
 const cors = require("cors");
 const routes = require("./routes");
+const { invalidJsonHandler, catchAlleError } = require("./middleware/invalidJsonHandler");
 
 const app = express();
 
@@ -19,13 +20,8 @@ app.use(cors());
 
 app.use(express.json());
 
-//  Handle JSON parsing errors
-app.use((err, req, res, next) => {
-  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-    return res.status(400).json({ error: "Invalid JSON" });
-  }
-  next();
-});
+
+
 
 // port
 const port = process.env.PORT || 5000;
@@ -40,3 +36,7 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
 });
 
 app.use("/api", routes);
+
+//  Handle JSON parsing errors
+app.use(invalidJsonHandler);
+app.use(catchAlleError);
