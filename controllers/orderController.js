@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 
 const User = require("../models/userModel");
 
+// order an item
 const handlePlaceAnOrder = async (req, res) => {
   const { email, _id, items, price, quantity, total, stock } = req.body;
 
@@ -50,6 +51,7 @@ const handlePlaceAnOrder = async (req, res) => {
   }
 };
 
+// update the status of an item ordered
 const handleUpdateOrderStutus = async (req, res) => {
   const { _id } = req.body;
 
@@ -78,6 +80,7 @@ const handleUpdateOrderStutus = async (req, res) => {
   }
 };
 
+// view all order
 const handleGetAllOrders = async (req, res) => {
   try {
     const orderDetails = await Order.find();

@@ -1,5 +1,6 @@
 const Category = require("../models/categoryModel");
 
+// add category
 const handleCategory = async (req, res) => {
   const { name } = req.body;
 

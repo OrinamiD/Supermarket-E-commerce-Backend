@@ -175,6 +175,7 @@ const handleResetPassword = async (req, res) => {
   }
 };
 
+// verify OTP
 const handleVerifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   try {

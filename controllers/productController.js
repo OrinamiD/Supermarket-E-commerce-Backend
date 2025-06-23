@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 
+// add a product
 const handleAddNewProduct = async (req, res) => {
   const { name, price, stock, category } = req.body;
 
@@ -26,6 +27,7 @@ const handleAddNewProduct = async (req, res) => {
   }
 };
 
+// view all products
 const handleGetAllProducts = async (req, res) => {
   try {
     const allProducts = await Product.find();
@@ -34,12 +36,13 @@ const handleGetAllProducts = async (req, res) => {
       return res.status(404).json({ message: "products does not exist" });
     }
 
-    return res.status(200).json({ message: "successful", allProducts });
+    return res.status(200).json({ message: "Access grant successfully", allProducts });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
+//view one product
 const handleGetOneProduct = async (req, res) => {
   const { _id } = req.body;
 
@@ -50,12 +53,13 @@ const handleGetOneProduct = async (req, res) => {
       return res.status(404).json({ message: "product not found" });
     }
 
-    return res.status(200).json({ message: "Sucessfull", neededProduct });
+    return res.status(200).json({ message: "Access grant Sucessfullly", neededProduct });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
+// update product price
 const handleUpdateProductPrice = async (req, res) => {
   const { _id } = req.body;
 

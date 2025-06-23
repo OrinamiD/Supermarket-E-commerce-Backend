@@ -26,7 +26,7 @@ router.get("/all-products", auth, handleGetAllProducts);
 router.get("/one-product", auth, handleGetOneProduct);
 
 router.patch(
-  "/update-prduct-price",
+  "/update-product-price",
   validateUpdateProductPrice,
   auth,
   isAdmin,

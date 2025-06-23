@@ -7,23 +7,23 @@ const {
   handleVerifyOtp,
 } = require("../controllers/authController");
 const {
-  AuthSignup,
-  loginValidation,
+  validateSignup,
+  validateLogin,
   auth,
-  forgotPasswordValidate,
-  resetPasswordValidate,
+  validateForgotPassword,
+  validateResetPassword,
   validateOTP,
 } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post("/signup", AuthSignup, handleSignup);
+router.post("/signup", validateSignup, handleSignup);
 
-router.post("/signin", loginValidation, handleSignin);
+router.post("/signin", validateLogin, handleSignin);
 
-router.post("/signin", forgotPasswordValidate, auth, handleFogotPassword);
+router.post("/forgotten-password", validateForgotPassword, auth, handleFogotPassword);
 
-router.post("/signin", resetPasswordValidate, auth, handleResetPassword);
+router.post("/reset-password", validateResetPassword, auth, handleResetPassword);
 
 router.post("/verify-otp", validateOTP, auth, handleVerifyOtp);
 

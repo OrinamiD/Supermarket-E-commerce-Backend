@@ -1,4 +1,4 @@
-const categoryValidation = async (req, res, next) => {
+const validateCategory = async (req, res, next) => {
   const { name } = req.body;
 
   const errors = [];
@@ -14,4 +14,4 @@ const categoryValidation = async (req, res, next) => {
   next();
 };
 
-module.exports = categoryValidation;
+module.exports = validateCategory;

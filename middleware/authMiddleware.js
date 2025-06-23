@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const joi = require("joi");
 const User = require("../models/userModel");
 
-const AuthSignup = async (req, res, next) => {
+const validateSignup = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const errors = [];
@@ -69,7 +69,7 @@ const AuthSignup = async (req, res, next) => {
   next();
 };
 
-const loginValidation = async (req, res, next) => {
+const validateLogin = async (req, res, next) => {
   const { email, password } = req.body;
 
   const errors = [];
@@ -125,7 +125,7 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-const forgotPasswordValidate = async (req, res, next) => {
+const validateForgotPassword = async (req, res, next) => {
   const { email } = req.body;
 
   const errors = [];
@@ -140,7 +140,7 @@ const forgotPasswordValidate = async (req, res, next) => {
 
   next();
 };
-const resetPasswordValidate = async (req, res, next) => {
+const validateResetPassword = async (req, res, next) => {
   const { password } = req.body;
 
   const errors = [];
@@ -177,11 +177,11 @@ const validateOTP = async (req, res, next) => {
 };
 
 module.exports = {
-  AuthSignup,
-  loginValidation,
+  validateSignup,
+  validateLogin,
   auth,
   isAdmin,
-  forgotPasswordValidate,
-  resetPasswordValidate,
+  validateForgotPassword,
+  validateResetPassword,
   validateOTP,
 };
