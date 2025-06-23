@@ -10,7 +10,7 @@ const dotenv = require("dotenv").config();
 
 const cors = require("cors");
 const routes = require("./routes");
-const { invalidJsonHandler, catchAlleError } = require("./middleware/invalidJsonHandler");
+const errorHandler = require("./middleware/invalidJsonHandler");
 
 const app = express();
 
@@ -38,5 +38,5 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
 app.use("/api", routes);
 
 //  Handle JSON parsing errors
-app.use(invalidJsonHandler);
-app.use(catchAlleError);
+app.use(errorHandler);
+

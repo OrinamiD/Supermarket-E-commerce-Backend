@@ -1,18 +1,24 @@
-// // Handle invalid JSON
-const invalidJsonHandler = async (err, req, res, next) => {
-  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-    return res.status(400).json({ error: "Invalid JSON" });
+
+const errorHandler = async (err, req, res, next) => {
+  // Handle invalid JSON
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({ error: 'Invalid JSON' });
   }
-  next(err);
+
+  // Handle JWT errors
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({ error: 'Token expired' });
+  }
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+
+  // Fallback generic error
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 };
 
-// Catch-all error handler (for everything else)
-const catchAlleError = async (err, req, res, next) => {
-  console.error(err.stack); // Log for debugging
-  res.status(500).json({ message: err.message });
-};
-// error: "Internal Server Error" 
-module.exports = {
-  invalidJsonHandler,
-  catchAlleError,
-};
+module.exports = errorHandler
+
+
+
