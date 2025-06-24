@@ -23,7 +23,7 @@ router.post("/signin", validateLogin, handleSignin);
 
 router.post("/forgotten-password", validateForgotPassword, auth, handleFogotPassword);
 
-router.post("/reset-password", validateResetPassword, auth, handleResetPassword);
+router.patch("/reset-password", validateResetPassword, auth, handleResetPassword);
 
 router.post("/verify-otp", validateOTP, auth, handleVerifyOtp);
 
