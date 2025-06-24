@@ -1,9 +1,10 @@
+const { json } = require("express");
 const nodemailer = require("nodemailer");
 
-const sendRegistrationEmail = async (email) => {
+const sendRegistrationEmail = async (name, email, password ) => {
   try {
     const mailTransport = nodemailer.createTransport({
-      service: "gamil",
+      service: "gmail",
       auth: {
         user: `${process.env.EMAIL}`,
         pass: `${process.env.EMAIL_PASSWORD}`,
@@ -24,9 +25,10 @@ const sendRegistrationEmail = async (email) => {
 `,
     };
 
-    mailTransport.sendMail(emailDetails);
+   await mailTransport.sendMail(emailDetails);
+   return json({message: "Email sending error:", emailInfo: emailDetails?.from, emailInfo: emailDetails?.to, emailInfo: emailDetails?.subject })
   } catch (error) {
-    return json({ message: error.message });
+     return json({message: "Email sending error:", error})
   }
 };
 
