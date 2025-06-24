@@ -26,7 +26,7 @@ const sendRegistrationEmail = async (name, email, password ) => {
     };
 
    await mailTransport.sendMail(emailDetails);
-   return json({message: "Email sending error:", emailInfo: emailDetails?.from, emailInfo: emailDetails?.to, emailInfo: emailDetails?.subject })
+   console.log({message: "Check your email:"})
   } catch (error) {
      return json({message: "Email sending error:", error})
   }

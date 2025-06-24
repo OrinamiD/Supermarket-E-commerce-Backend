@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
+const { isPartOfTypeNode } = require("typescript");
 
-const sendForgotPasswordEmail = async (email, token) => {
+const sendForgotPasswordEmail = async (email, token, otp) => {
   try {
     const mailTransport = nodemailer.createTransport({
       service: "gmail",
@@ -27,6 +28,12 @@ const sendForgotPasswordEmail = async (email, token) => {
     </p>
     <p>
         <a href="https://www.yourcareerex.com/reset-password/${token}">https://www.yourcareerex.com/reset-password/${token}</a>
+    </p>
+
+    <hr>
+
+       <p>
+        <a href="https://www.yourcareerex.com/reset-password/${otp}">https://www.yourcareerex.com/reset-password/${otp}</a>
     </p>
 `,
     };

@@ -100,7 +100,8 @@ const handleFogotPassword = async (req, res) => {
     user.OtpCode = {
       OTP: hashOTP,
       verified: false,
-      expiresIn: new (Date.now() + 10 * 60 * 1000)(), // 10 mins
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 min
+
     };
     await user.save();
 
